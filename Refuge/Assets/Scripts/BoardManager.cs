@@ -28,7 +28,10 @@ public class BoardManager : MonoBehaviour {
     public GameObject[] wallTiles;
     public GameObject[] foodTiles;
     public GameObject[] enemyTiles;
-    public GameObject[] outerWallTiles;
+    public GameObject[] northWallTiles;
+    public GameObject[] sideWallTiles;
+    public GameObject[] southWallTiles;
+
 
     public Transform boardHolder;
     private List<Vector3> gridPositions = new List<Vector3>();
@@ -53,8 +56,18 @@ public class BoardManager : MonoBehaviour {
             for(int y = -1; y < rows + 1; y++)
             {
                 GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
-                if (x == -1 || x == columns || y == -1 || y == rows)
-                    toInstantiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
+                if (x == -1 || x == columns)
+                {
+                    toInstantiate = sideWallTiles[Random.Range(0, sideWallTiles.Length)];
+                }
+                if (y == -1)
+                {
+                    toInstantiate = southWallTiles[Random.Range(0, southWallTiles.Length)];
+                }
+                if (y == rows)
+                {
+                    toInstantiate = northWallTiles[Random.Range(0, northWallTiles.Length)];
+                }
                 GameObject instance =
                     Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
                 instance.transform.SetParent(boardHolder);
