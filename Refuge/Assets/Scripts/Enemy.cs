@@ -9,6 +9,8 @@ public class Enemy : MovingObject {
     private Animator animator;
     private Transform target;
     private bool skipMove;
+	public AudioClip copAttack1;
+	public AudioClip copAttack2;
 
     protected override void Start()
     {
@@ -49,5 +51,6 @@ public class Enemy : MovingObject {
         Player hitPlayer = component as Player;
         hitPlayer.LoseFood(playerDamage);
         animator.SetTrigger("copAttack");
+		SoundManager.instance.RandomizeSfx (copAttack1, copAttack2);
     }
 }
