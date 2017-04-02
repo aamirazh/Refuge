@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
@@ -19,9 +20,10 @@ public class GameManager : MonoBehaviour {
     private List<Enemy> enemies;
     private bool enemiesMoving;
 	private bool doingSetup;
+    private bool firstRun = true;
 
 
-	void Awake()
+    void Awake()
     {
         if (instance == null)
             instance = this;
@@ -34,12 +36,30 @@ public class GameManager : MonoBehaviour {
         InitGame();
     }
 
-	public void OnLevelWasLoaded (int index) 
-	{
-		level++;
+    void OnEnable()
+    {
+        //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
+        SceneManager.sceneLoaded += OnLevelFinishedLoading;
+    }
 
-		InitGame ();
-	}
+    void OnDisable()
+    {
+        //Tell our 'OnLevelFinishedLoading' function to stop listening for a scene change as soon as this script is disabled. Remember to always have an unsubscription for every delegate you subscribe to!
+        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+    }
+
+    void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+    {
+        if (firstRun)
+        {
+            firstRun = false;
+            return;
+        }
+
+        level++;
+        InitGame();
+    }
+
     void Update()
     {
         if(playersTurn || enemiesMoving || doingSetup)
