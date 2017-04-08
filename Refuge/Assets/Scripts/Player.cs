@@ -58,6 +58,16 @@ public class Player : MovingObject {
         food--;
 		foodText.text = "Food: " + food;
 
+        if(xDir < 0)
+        {
+            animator.SetTrigger("playerTurnLeft");
+            animator.ResetTrigger("playerTurnRight");
+        } else if(xDir > 0)
+        {
+            animator.SetTrigger("playerTurnRight");
+            animator.ResetTrigger("playerTurnLeft");
+        }
+
         base.AttemptMove <T> (xDir, yDir);
 
         RaycastHit2D hit;
