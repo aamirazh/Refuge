@@ -28,7 +28,7 @@ public class OpeningSequence : MonoBehaviour {
             }
             else if(currentIndex + 1 == sequenceSlides.Length)
             {
-                SceneManager.LoadScene("MainScene");
+                SceneManager.LoadScene("WildScene");
             }
         }
     }

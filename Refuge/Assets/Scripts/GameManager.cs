@@ -6,10 +6,14 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
+    private const int LEVEL_TRANSITION = 2;
+
 	public float levelStartDelay = 2f;
     public float TurnDelay = 0.1f;
     public static GameManager instance = null;
-    public BoardManager boardScript;
+    public BoardManager wildBoardManager;
+    public BoardManager cityBoardManager;
+    private BoardManager boardScript;
     public int playerFoodPoints = 100;
     [HideInInspector]
     public bool playersTurn = true;
@@ -32,7 +36,13 @@ public class GameManager : MonoBehaviour {
 
         enemies = new List<Enemy>();
         DontDestroyOnLoad(gameObject);
-        boardScript = GetComponent<BoardManager>();
+        if(level < LEVEL_TRANSITION)
+        {
+            boardScript = wildBoardManager;
+        } else
+        {
+            boardScript = cityBoardManager;
+        }
         InitGame();
     }
 
@@ -57,6 +67,10 @@ public class GameManager : MonoBehaviour {
         }
 
         level++;
+        if(level >= LEVEL_TRANSITION)
+        {
+            boardScript = cityBoardManager;
+        }
         InitGame();
     }
 
