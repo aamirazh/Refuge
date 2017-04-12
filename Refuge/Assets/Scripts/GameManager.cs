@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
-    public const int LEVEL_TRANSITION = 3;
+    public const int LEVEL_TRANSITION = 2;
 
 	public float levelStartDelay = 2f;
     public float TurnDelay = 0.1f;
@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour {
     private bool enemiesMoving;
 	private bool doingSetup;
     private bool firstRun = true;
+    private bool doingMidGameTransition = false;
+    private bool midFirstRun = true;
+    private bool midRunOnce = true;
 
 
     void Awake()
@@ -36,6 +39,7 @@ public class GameManager : MonoBehaviour {
 
         enemies = new List<Enemy>();
         DontDestroyOnLoad(gameObject);
+
         if(level < LEVEL_TRANSITION)
         {
             boardScript = wildBoardManager;
@@ -43,7 +47,10 @@ public class GameManager : MonoBehaviour {
         {
             boardScript = cityBoardManager;
         }
-        InitGame();
+        if(!doingMidGameTransition)
+        {
+            InitGame();
+        }
     }
 
     void OnEnable()
@@ -66,17 +73,45 @@ public class GameManager : MonoBehaviour {
             return;
         }
 
-        level++;
-        if(level >= LEVEL_TRANSITION)
+        if(doingMidGameTransition)
         {
-            boardScript = cityBoardManager;
+            return;
         }
+
+        if (level >= LEVEL_TRANSITION && midRunOnce)
+        {
+            midRunOnce = false;
+            boardScript = cityBoardManager;
+            StartCoroutine(MidGameTransition());
+        }
+        else if (midFirstRun && !midRunOnce)
+        {
+            midFirstRun = false;
+            return;
+        } else
+        { 
+            level++;
+            InitGame();
+        }
+    }
+
+    private IEnumerator MidGameTransition()
+    {
+        doingMidGameTransition = true;
+        PauseGame();
+        SceneManager.LoadScene("MidScene");
+        while (SceneManager.GetActiveScene().name.Equals("MidScene"))
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        UnpauseGame();
+        doingMidGameTransition = false;
         InitGame();
     }
 
     void Update()
     {
-        if(playersTurn || enemiesMoving || doingSetup)
+        if(playersTurn || enemiesMoving || doingSetup || doingMidGameTransition)
         {
             return;
         }
@@ -108,16 +143,17 @@ public class GameManager : MonoBehaviour {
 
     void InitGame()
     {
-		doingSetup = true;
+        doingSetup = true;
 
-		levelImage = GameObject.Find ("LevelImage");
-		levelText = GameObject.Find ("LevelText").GetComponent<Text> ();
-		levelText.text = "Day " + level;
-		levelImage.SetActive (true);
-		Invoke ("HideLevelImage", levelStartDelay);
+        levelImage = GameObject.Find("LevelImage");
+        levelText = GameObject.Find("LevelText").GetComponent<Text>();
+        levelText.text = "Day " + level;
+        levelImage.SetActive(true);
+        Invoke("HideLevelImage", levelStartDelay);
 
         enemies.Clear();
         boardScript.SetupScene(level);
+        
     }
 
 	private void HideLevelImage()
@@ -136,5 +172,27 @@ public class GameManager : MonoBehaviour {
     public bool IsCityPhase()
     {
         return level >= LEVEL_TRANSITION;
+    }
+
+    public bool DoingMidTransition()
+    {
+        return doingMidGameTransition;
+    }
+
+    private void PauseGame()
+    {
+
+        enabled = false;
+        instance.enabled = false;
+        instance.gameObject.SetActive(false);
+        this.gameObject.SetActive(false);
+    }
+
+    private void UnpauseGame()
+    {
+        enabled = true;
+        this.gameObject.SetActive(true);
+        instance.enabled = true;
+        instance.gameObject.SetActive(true);
     }
 }

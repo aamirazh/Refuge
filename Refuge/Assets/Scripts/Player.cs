@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Player : MovingObject {
@@ -20,6 +21,7 @@ public class Player : MovingObject {
 
     private Animator animator;
     private int food;
+    private bool firstRun = true;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -35,11 +37,21 @@ public class Player : MovingObject {
     {
         GameManager.instance.playerFoodPoints = food;
     }
-	
-	// Update is called once per frame
-	void Update () {
-        if (!GameManager.instance.playersTurn) return;
 
+    private void OnEnable()
+    {
+
+        food = GameManager.instance.playerFoodPoints;
+
+    }
+
+    // Update is called once per frame
+    void Update () {
+        if (!GameManager.instance.playersTurn) return;
+        if(GameManager.instance.DoingMidTransition())
+        {
+            GameManager.instance.playerFoodPoints = food;
+        }
         int horizontal = 0;
         int vertical = 0;
 
@@ -105,7 +117,9 @@ public class Player : MovingObject {
 
     private void Restart()
     {
-        Application.LoadLevel(Application.loadedLevel);
+        GameManager.instance.playerFoodPoints = food;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        food = GameManager.instance.playerFoodPoints;
     }
 
     public void LoseFood (int loss)
