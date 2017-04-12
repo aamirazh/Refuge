@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
-    private const int LEVEL_TRANSITION = 2;
+    public const int LEVEL_TRANSITION = 3;
 
 	public float levelStartDelay = 2f;
     public float TurnDelay = 0.1f;
@@ -131,5 +131,10 @@ public class GameManager : MonoBehaviour {
 		levelText.text = "After " + level + " days, you starved.";
 		levelImage.SetActive(true);
         enabled = false;
+    }
+
+    public bool IsCityPhase()
+    {
+        return level >= LEVEL_TRANSITION;
     }
 }

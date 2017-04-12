@@ -27,7 +27,8 @@ public class BoardManager : MonoBehaviour {
     public GameObject[] floorTiles;
     public GameObject[] wallTiles;
     public GameObject[] foodTiles;
-    public GameObject[] enemyTiles;
+    public GameObject[] wildEnemies;
+    public GameObject[] cityEnemies;
     public GameObject[] northWallTiles;
     public GameObject[] sideWallTiles;
     public GameObject[] southWallTiles;
@@ -103,7 +104,15 @@ public class BoardManager : MonoBehaviour {
         LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
         LayoutObjectAtRandom(foodTiles, foodCount.minimum, foodCount.maximum);
         int enemyCount = (int)Mathf.Log(level, 2f); // how many enemies are in a level, based off level number
-        LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);
+        if(GameManager.instance.IsCityPhase())
+        {
+            LayoutObjectAtRandom(cityEnemies, enemyCount, enemyCount);
+
+        }
+        else
+        {
+            LayoutObjectAtRandom(wildEnemies, enemyCount, enemyCount);
+        }
         Instantiate(exit, new Vector3(columns - 1, rows - 1, 0F), Quaternion.identity);
 
     }
