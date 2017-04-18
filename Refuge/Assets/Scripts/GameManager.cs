@@ -164,7 +164,16 @@ public class GameManager : MonoBehaviour {
 
     public void GameOver()
     {
-		levelText.text = "After " + level + " days, you starved.";
+        levelText.fontSize = 16;
+        string textAddition = "";
+        if(IsCityPhase())
+        {
+            textAddition = "Unfortunately, Bob could not run his whole life.\nExhausted, starving, and alone, he gave up,\nand the police caught him and interrogated him.\nWhere he is now --we may never know.";
+        } else
+        {
+            textAddition = " Unfortunately, Bob could not complete the long journey\nto Mireaca.  Exhausted and starving,he had to return\nto his war-torn home.";
+        }
+		levelText.text = textAddition;
 		levelImage.SetActive(true);
         enabled = false;
     }
