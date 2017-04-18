@@ -171,7 +171,7 @@ public class GameManager : MonoBehaviour {
 
     public bool IsCityPhase()
     {
-        return level >= LEVEL_TRANSITION;
+        return level > LEVEL_TRANSITION;
     }
 
     public bool DoingMidTransition()

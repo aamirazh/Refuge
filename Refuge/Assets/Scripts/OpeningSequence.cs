@@ -11,6 +11,7 @@ public class OpeningSequence : MonoBehaviour {
 
     void Start()
     {
+        currentIndex = 0;
         HideAllSlides();
         DisplaySlide(0);
     }
