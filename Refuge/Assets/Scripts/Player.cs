@@ -42,16 +42,13 @@ public class Player : MovingObject {
     {
 
         food = GameManager.instance.playerFoodPoints;
-
+        
     }
 
     // Update is called once per frame
     void Update () {
         if (!GameManager.instance.playersTurn) return;
-        if(GameManager.instance.DoingMidTransition())
-        {
-            GameManager.instance.playerFoodPoints = food;
-        }
+ 
         int horizontal = 0;
         int vertical = 0;
 
