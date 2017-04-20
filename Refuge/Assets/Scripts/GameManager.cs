@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour {
     private bool doingMidGameTransition = false;
     private bool midFirstRun = true;
     private bool midRunOnce = true;
+    private bool isCityPhase = false;
 
 
     void Awake()
@@ -47,6 +48,7 @@ public class GameManager : MonoBehaviour {
         } else
         {
             boardScript = cityBoardManager;
+            isCityPhase = true;
         }
         if(!doingMidGameTransition)
         {
@@ -102,6 +104,8 @@ public class GameManager : MonoBehaviour {
         doingMidGameTransition = true;
         PauseGame();
         SceneManager.LoadScene("MidScene");
+        isCityPhase = true;
+        level = 0;
         while (SceneManager.GetActiveScene().name.Equals("MidScene"))
         {
             yield return new WaitForSeconds(0.1f);
@@ -182,7 +186,11 @@ public class GameManager : MonoBehaviour {
 
     public bool IsCityPhase()
     {
-        return level > LEVEL_TRANSITION;
+        if(level > LEVEL_TRANSITION)
+        {
+            isCityPhase = true;
+        }
+        return isCityPhase;
     }
 
     public bool DoingMidTransition()
