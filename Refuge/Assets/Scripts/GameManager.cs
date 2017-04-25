@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
-    public const int LEVEL_TRANSITION = 2;
+    public const int LEVEL_TRANSITION = 4;
 
 	public float levelStartDelay = 2f;
     public float TurnDelay = 0.1f;
@@ -14,7 +14,8 @@ public class GameManager : MonoBehaviour {
     public BoardManager wildBoardManager;
     public BoardManager cityBoardManager;
     private BoardManager boardScript;
-    public int playerFoodPoints = 100;
+    public int playerHealth = 30;
+	public int playerHealthPostTransition = 20;
     [HideInInspector]
     public bool playersTurn = true;
 
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour {
         else if (instance != this)
             Destroy(gameObject);
 
+		SoundManager.instance.playMainMusic ();
         enemies = new List<Enemy>();
         DontDestroyOnLoad(gameObject);
 
@@ -90,7 +92,7 @@ public class GameManager : MonoBehaviour {
         else if (midFirstRun && !midRunOnce)
         {
             midFirstRun = false;
-            playerFoodPoints = 50;
+			playerHealth = playerHealthPostTransition;
             return;
         } else
         { 
@@ -101,6 +103,7 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator MidGameTransition()
     {
+		SoundManager.instance.playAlternateMusic ();
         doingMidGameTransition = true;
         PauseGame();
         SceneManager.LoadScene("MidScene");
@@ -150,7 +153,6 @@ public class GameManager : MonoBehaviour {
     void InitGame()
     {
         doingSetup = true;
-
         levelImage = GameObject.Find("LevelImage");
         levelText = GameObject.Find("LevelText").GetComponent<Text>();
         levelText.text = "Day " + level;
@@ -170,6 +172,7 @@ public class GameManager : MonoBehaviour {
 
     public void GameOver()
     {
+		SoundManager.instance.playDeathMusic ();
         levelText.fontSize = 16;
         string textAddition = "";
         if(IsCityPhase())
@@ -200,7 +203,6 @@ public class GameManager : MonoBehaviour {
 
     private void PauseGame()
     {
-
         enabled = false;
         instance.enabled = false;
         instance.gameObject.SetActive(false);

@@ -6,6 +6,10 @@ public class SoundManager : MonoBehaviour {
 
 	public AudioSource efxSource;
 	public AudioSource musicSource;
+	public AudioClip introMusic;
+	public AudioClip mainMusic;
+	public AudioClip alternateMusic;
+	public AudioClip deathMusic;
 	public static SoundManager instance = null;
 
 	public float lowPitchRange = 0.95f;
@@ -20,10 +24,40 @@ public class SoundManager : MonoBehaviour {
 			Destroy (gameObject);
 
 		DontDestroyOnLoad (gameObject);
+		playIntroMusic ();
+	}
+
+	public void playIntroMusic ()
+	{
+		musicSource.Stop ();
+		musicSource.clip = introMusic;
+		musicSource.Play ();
+	}
+
+	public void playMainMusic ()
+	{
+		musicSource.Stop ();
+		musicSource.clip = mainMusic;
+		musicSource.Play ();
+	}
+		
+	public void playAlternateMusic ()
+	{
+		musicSource.Stop ();
+		musicSource.clip = alternateMusic;
+		musicSource.Play ();
+	}
+
+	public void playDeathMusic ()
+	{
+		musicSource.Stop ();
+		musicSource.clip = deathMusic;
+		musicSource.Play ();
 	}
 
 	public void PlaySingle (AudioClip clip)
 	{
+		musicSource.Stop ();
 		efxSource.clip = clip;
 		efxSource.Play ();
 	}
