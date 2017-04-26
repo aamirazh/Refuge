@@ -103,7 +103,7 @@ public class BoardManager : MonoBehaviour {
         InitializeList();
         LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);
         LayoutObjectAtRandom(foodTiles, foodCount.minimum, foodCount.maximum);
-        int enemyCount = (int)Mathf.Log(level, 2f); // how many enemies are in a level, based off level number
+		int enemyCount = level / 2; // how many enemies are in a level, based off level number
         if(GameManager.instance.IsCityPhase())
         {
             LayoutObjectAtRandom(cityEnemies, enemyCount, enemyCount);

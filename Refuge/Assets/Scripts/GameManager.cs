@@ -177,10 +177,10 @@ public class GameManager : MonoBehaviour {
         string textAddition = "";
         if(IsCityPhase())
         {
-            textAddition = "Unfortunately, Bob could not run his whole life.\nExhausted, starving, and alone, he gave up,\nand the police caught him and interrogated him.\nWhere he is now --we may never know.";
+			textAddition = "Unfortunately, Bob could not run his whole life.\nExhausted, starving, and alone, he gave up.\n The police caught him and began interrogating him.\nWhere he is now --we may never know.\n\nYou made it " + (level + LEVEL_TRANSITION) + " days before having to give up.";
         } else
         {
-            textAddition = " Unfortunately, Bob could not complete the long journey\nto Mireaca.  Exhausted and starving,he had to return\nto his war-torn home.";
+            textAddition = "Unfortunately, Bob could not complete the long journey\nto Mireaca. Exhausted and alone, he had to return\nto his home, which was now sucked dry by exploitation.\n\nYou made it " + level + " days before having to give up.";
         }
 		levelText.text = textAddition;
 		levelImage.SetActive(true);
