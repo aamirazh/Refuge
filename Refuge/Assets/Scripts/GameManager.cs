@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour {
             quotes.Add(2, "We must learn to live together as brothers or perish together as fools. Martin Luther King, Jr.");
             quotes.Add(3, "Preservation of one's own culture does not require contempt or disrespect for other cultures.  Cesar Chavez");
             quotes.Add(4, "We can see that immigration has become favorable terrain for the development of Islamism.  Marion Marachel-Le pen");
-            quotes.Add(5, "If our focus in immigration reform is exclusively on high-skilled or STEM immigrants, where do the rest of the millions yearning to join our ranks fit in?");
+            quotes.Add(5, "If our focus in immigration reform is exclusively on high-skilled or STEM immigrants, where do the rest of the millions yearning to join our ranks fit in? Cedric Richmond");
             quotes.Add(6, "Illegal immigration is crisis for our country. It is an open door for drugs, criminals, and potential terrorists to enter our country. It is straining our economy, adding costs to our judicial, healthcare, and education systems. Timothy Murphy");
             quotes.Add(7, "The more you can increase fear of drugs and crime, welfare mothers, immigrants and aliens, the more you control all the people. Noam Chomsky");
             quotes.Add(8, "I had always hoped that this land might become a safe and agreeable asylum to the virtuous and persecuted part of mankind, to whatever nation they might belong.  George Washington");
@@ -173,6 +173,7 @@ public class GameManager : MonoBehaviour {
             quotes.Add(15, "The truth is, immigrants tend to be more American than people born here.  Author Chuck Palahniuk");
             quotes.Add(16, "Wilders understands that culture and demographics are our destiny. We can't restore our civilization with somebody else's babies.  Steve King");
             quotes.Add(17, "I would ask you to go back through history and figure out where are these contributions that have been made by these other categories of people that you are talking about, where did any other subgroup of people contribute more to civilization? Than — than western civilization itself that's rooted in western Europe, eastern Europe and the United States of America, and every place where Christianity settled the world. That's all of western civilization.  Steve King");
+            quotes.Add(18, "When Mexico sends its people, they're not sending their best.  They're not sending you.  They're not sending you.  They're sending people that have lots of problems, and they're bringing those problems with us.  They're bringing drugs.  They're bringing crime.  They're rapists.  And some, I assume, are good people.  Donald J. Trump");
         }
     }
 
@@ -224,6 +225,7 @@ public class GameManager : MonoBehaviour {
             textAddition = "Unfortunately, Bob could not complete the long journey\nto Mireaca. Exhausted and alone, he had to return\nto his home, which was now sucked dry by exploitation.\n\nYou made it " + level + " days before having to give up.";
         }
 		levelText.text = textAddition;
+        quoteText.gameObject.SetActive(false);
 		levelImage.SetActive(true);
         enabled = false;
     }
