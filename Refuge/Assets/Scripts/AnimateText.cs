@@ -8,8 +8,8 @@ public class AnimateText : MonoBehaviour
     private bool fadeInComplete = false;
     private bool fadeOutComplete = false;
 
-    public float FadeInTime;
-    public float FadeOutTime;
+    private float FadeInTime = 0.5f;
+    private float FadeOutTime = 1.5f;
 
     public void Update()
     {
@@ -19,7 +19,7 @@ public class AnimateText : MonoBehaviour
             FadeIn();
             fadeInComplete = true;
         }
-        if(timeElapsed > FadeOutTime && !fadeOutComplete)
+        if(timeElapsed > FadeOutTime && !fadeOutComplete && Input.anyKey)
         {
             FadeOut();
             fadeOutComplete = true;

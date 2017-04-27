@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 
     public const int LEVEL_TRANSITION = 4;
 
-	public float levelStartDelay = 2f;
+	public float levelStartDelay = 0.01f;
     public float TurnDelay = 0.1f;
     public static GameManager instance = null;
     public BoardManager wildBoardManager;
@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector]
     public bool playersTurn = true;
 
+    private Text quoteText;
 	private Text levelText;
 	private GameObject levelImage;
     private int level = 1;
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour {
     private bool midRunOnce = true;
     private bool isCityPhase = false;
 
+    private Dictionary<int, string> quotes = new Dictionary<int, string>();
 
     void Awake()
     {
@@ -150,18 +152,57 @@ public class GameManager : MonoBehaviour {
         enemiesMoving = false;
     }
 
+    private void LoadQuotes()
+    {
+        if(!quotes.ContainsKey(1))
+        {
+            quotes.Add(1, "I refuse to accept the view that mankind is so tragically bound to the starless midnight of racism and war that the bright daybreak of peace and brotherhood can never become a reality... I believe that unarmed truth and unconditional love will have the final word. Martin Luther King Jr");
+            quotes.Add(2, "We must learn to live together as brothers or perish together as fools. Martin Luther King, Jr.");
+            quotes.Add(3, "Preservation of one's own culture does not require contempt or disrespect for other cultures.  Cesar Chavez");
+            quotes.Add(4, "We can see that immigration has become favorable terrain for the development of Islamism.  Marion Marachel-Le pen");
+            quotes.Add(5, "If our focus in immigration reform is exclusively on high-skilled or STEM immigrants, where do the rest of the millions yearning to join our ranks fit in?");
+            quotes.Add(6, "Illegal immigration is crisis for our country. It is an open door for drugs, criminals, and potential terrorists to enter our country. It is straining our economy, adding costs to our judicial, healthcare, and education systems. Timothy Murphy");
+            quotes.Add(7, "The more you can increase fear of drugs and crime, welfare mothers, immigrants and aliens, the more you control all the people. Noam Chomsky");
+            quotes.Add(8, "I had always hoped that this land might become a safe and agreeable asylum to the virtuous and persecuted part of mankind, to whatever nation they might belong.  George Washington");
+            quotes.Add(9, "Everywhere immigrants have enriched and strengthened the fabric of American life.  John F. Kennedy");
+            quotes.Add(10, "I don't see how the party that says it's the party of the family is going to adopt an immigration policy which destroys families that have been here a quarter century.  Newt Gingrich");
+            quotes.Add(11, "The land flourished because it was fed from so many sources-because it was nourished by so many cultures and traditions and peoples.  -Lyndon B. Johnson");
+            quotes.Add(12, "Remember, remember always, that all of us, and you and I especially, are descended rom immigrants and revolutionists.  Franklin D. Roosevelt");
+            quotes.Add(13, "A nation that cannot control its borders is not a nation.  Ronald Reagan");
+            quotes.Add(14, "No one leaves home unless home is the mouth of a shark.  Warsan Shire, Teaching My Mother How to Give Birth");
+            quotes.Add(15, "The truth is, immigrants tend to be more American than people born here.  Author Chuck Palahniuk");
+            quotes.Add(16, "Wilders understands that culture and demographics are our destiny. We can't restore our civilization with somebody else's babies.  Steve King");
+            quotes.Add(17, "I would ask you to go back through history and figure out where are these contributions that have been made by these other categories of people that you are talking about, where did any other subgroup of people contribute more to civilization? Than — than western civilization itself that's rooted in western Europe, eastern Europe and the United States of America, and every place where Christianity settled the world. That's all of western civilization.  Steve King");
+        }
+    }
+
     void InitGame()
     {
         doingSetup = true;
+        LoadQuotes();
+        quoteText = GameObject.Find("QuoteText").GetComponent<Text>();
         levelImage = GameObject.Find("LevelImage");
         levelText = GameObject.Find("LevelText").GetComponent<Text>();
         levelText.text = "Day " + level;
+        System.Random rand = new System.Random();
+        int chooseQuote = rand.Next(1, 17);
+        quoteText.text = quotes[chooseQuote];
         levelImage.SetActive(true);
-        Invoke("HideLevelImage", levelStartDelay);
+
+        StartCoroutine(DelayGameStartUntilInput());
 
         enemies.Clear();
         boardScript.SetupScene(level);
         
+    }
+
+    private IEnumerator DelayGameStartUntilInput()
+    {
+        while(!Input.anyKey)
+        {
+            yield return new WaitForSeconds(0.0001f);
+        }
+        Invoke("HideLevelImage", levelStartDelay);
     }
 
 	private void HideLevelImage()
