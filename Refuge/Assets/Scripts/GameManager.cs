@@ -210,7 +210,7 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator DelayGameRestartUntilInput()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
         while (!Input.anyKey)
         {
             yield return new WaitForSeconds(0.0001f);
