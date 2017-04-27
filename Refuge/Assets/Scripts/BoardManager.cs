@@ -35,10 +35,11 @@ public class BoardManager : MonoBehaviour {
 
 
     public Transform boardHolder;
-    private List<Vector3> gridPositions = new List<Vector3>();
+    private List<Vector3> gridPositions;
 
     void InitializeList()
     {
+        gridPositions = new List<Vector3>();
         for(int x = 1; x < columns - 1; x++)
         {
             for(int y = 1; y < rows - 1; y++)
