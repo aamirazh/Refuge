@@ -27,6 +27,11 @@ public class SoundManager : MonoBehaviour {
 		playIntroMusic ();
 	}
 
+    public void pauseMusic()
+    {
+        musicSource.Stop();
+    }
+
 	public void playIntroMusic ()
 	{
 		musicSource.Stop ();

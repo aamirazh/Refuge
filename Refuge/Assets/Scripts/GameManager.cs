@@ -208,7 +208,19 @@ public class GameManager : MonoBehaviour {
         Invoke("HideLevelImage", levelStartDelay);
     }
 
-	private void HideLevelImage()
+    private IEnumerator DelayGameRestartUntilInput()
+    {
+        yield return new WaitForSeconds(1.0f);
+        while (!Input.anyKey)
+        {
+            yield return new WaitForSeconds(0.0001f);
+        }
+        SceneManager.LoadScene("StartScreen");
+        Destroy(SoundManager.instance.gameObject);
+        Destroy(gameObject);
+    }
+
+    private void HideLevelImage()
 	{
 		levelImage.SetActive(false);
 		doingSetup = false;
@@ -230,6 +242,7 @@ public class GameManager : MonoBehaviour {
         quoteText.gameObject.SetActive(false);
 		levelImage.SetActive(true);
         enabled = false;
+        StartCoroutine(DelayGameRestartUntilInput());
     }
 
     public bool IsCityPhase()
