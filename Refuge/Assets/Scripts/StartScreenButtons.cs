@@ -19,4 +19,9 @@ public class StartScreenButtons : MonoBehaviour {
     {
         SceneManager.LoadScene("StartScreen");
     }
+
+    public void TransitionToTutorial()
+    {
+        SceneManager.LoadScene("ControlsScene");
+    }
 }

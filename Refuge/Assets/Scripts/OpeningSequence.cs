@@ -6,8 +6,10 @@ using UnityEngine.SceneManagement;
 public class OpeningSequence : MonoBehaviour {
 
     public GameObject[] sequenceSlides;
+    private float timeLimit = 20;
     private int currentIndex = 0;
     private bool inputCollectionPaused = false;
+    private float timeElapsed = 0;
 
     void Start()
     {
@@ -18,7 +20,8 @@ public class OpeningSequence : MonoBehaviour {
 
     void Update()
     {
-        if(Input.anyKey && !inputCollectionPaused)
+        timeElapsed += Time.deltaTime;
+        if((Input.anyKey && !inputCollectionPaused) || (timeElapsed >= timeLimit && !inputCollectionPaused))
         {
             if((currentIndex + 1) < sequenceSlides.Length)
             {
@@ -31,6 +34,7 @@ public class OpeningSequence : MonoBehaviour {
             {
                 SceneManager.LoadScene("MainScene");
             }
+            timeElapsed = 0;
         }
     }
 
