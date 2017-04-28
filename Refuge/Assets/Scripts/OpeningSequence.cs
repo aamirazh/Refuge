@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class OpeningSequence : MonoBehaviour {
 
     public GameObject[] sequenceSlides;
-    private float timeLimit = 20;
+    private float timeLimit = 10;
     private int currentIndex = 0;
     private bool inputCollectionPaused = false;
     private float timeElapsed = 0;

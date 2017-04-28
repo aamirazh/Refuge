@@ -6,10 +6,11 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
-    public const int LEVEL_TRANSITION = 6;
-	public const int LAST_LEVEL = 8;
+    public const int LEVEL_TRANSITION = 1;
+	public const int LAST_LEVEL = 1;
 
 	public float levelStartDelay = 0.01f;
+	public float levelStartDelayWithQuote = 5.0f;
     public float TurnDelay = 0.1f;
     public static GameManager instance = null;
     public BoardManager wildBoardManager;
@@ -51,7 +52,7 @@ public class GameManager : MonoBehaviour {
         enemies = new List<Enemy>();
         DontDestroyOnLoad(gameObject);
 
-        if(level < LEVEL_TRANSITION)
+        if(level <= LEVEL_TRANSITION)
         {
             boardScript = wildBoardManager;
         } else
@@ -176,7 +177,6 @@ public class GameManager : MonoBehaviour {
 			quotes.Add( "No one leaves home unless home is the mouth of a shark.\n\n- Warsan Shire, Teaching My Mother How to Give Birth");
 			quotes.Add( "The truth is, immigrants tend to be more American than people born here.\n\n- Chuck Palahniuk, Choke");
 			quotes.Add( "Wilders understands that culture and demographics are our destiny. We can't restore our civilization with somebody else's babies.\n\n- Steve King");
-			quotes.Add( "I would ask you to go back through history and figure out where are these contributions that have been made by these other categories of people that you are talking about, where did any other subgroup of people contribute more to civilization than western civilization itself, that's rooted in western Europe, eastern Europe and the United States of America, and every place where Christianity settled the world? That's all of western civilization.\n\n- Steve King");
 			quotes.Add( "When Mexico sends its people, they're not sending their best... They're sending people that have lots of problems, and they're bringing those problems with us. They're bringing drugs. They're bringing crime. They're rapists. And some, I assume, are good people.\n\n- Donald J. Trump");
         }
     }
@@ -186,6 +186,9 @@ public class GameManager : MonoBehaviour {
         doingSetup = true;
 		if (level > LAST_LEVEL) {
 			win = true;
+			quoteImage = GameObject.Find ("QuoteImage");
+			levelImage = GameObject.Find ("LevelImage");
+			deathImage = GameObject.Find ("DeathImage");
 			GameOver ();
 		} else {
 			deathImage = GameObject.Find ("DeathImage");
@@ -203,13 +206,19 @@ public class GameManager : MonoBehaviour {
 			quoteImage.SetActive (true);
 			quoteText.gameObject.SetActive (true);
 
-			StartCoroutine (DelayGameStartUntilInput ());
+			StartCoroutine (DelayGameStart ());
 
 			enemies.Clear ();
 			boardScript.SetupScene (level);
 		}
         
     }
+
+	private IEnumerator DelayGameStart()
+	{
+		yield return new WaitForSeconds(5.0f);
+		Invoke ("HideLevelImage", levelStartDelay);
+	}
 
     private IEnumerator DelayGameStartUntilInput()
     {
@@ -244,8 +253,7 @@ public class GameManager : MonoBehaviour {
 		SoundManager.instance.playDeathMusic ();
 		deathImage.SetActive(true);
 		Text deathText = GameObject.Find ("DeathText").GetComponent<Text> ();
-		if (win)
-			deathText.text = "After weeks of running, Sal finally managed to lose the cops. He found a small town to lay low and hide in, but was forced to work unstable jobs for income as he didn't want to reveal his identity. He was finally safe, and could start working towards this Mireacan dream..\nBut at what cost?";
+		if (win) deathText.text = "After weeks of running, Sal finally managed to lose the cops. He found a small town to lay low and hide in, but was forced to work unstable jobs for income as he didn't want to reveal his identity. He was finally safe, and could start working towards this Mireacan dream..\nBut at what cost?";
 		else if(IsCityPhase())
 		{
 			deathText.text = "Unfortunately, Sal could not run his whole life.Exhausted, starving, and alone, he gave up. The police caught him and began interrogating him.\nWhere he is now --we may never know.\n\nHe made it " + (level + LEVEL_TRANSITION) + " days before having to give up.";
