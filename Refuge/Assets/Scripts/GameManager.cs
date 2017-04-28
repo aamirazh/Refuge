@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
-    public const int LEVEL_TRANSITION = 4;
+    public const int LEVEL_TRANSITION = 6;
+	public const int LAST_LEVEL = 8;
 
 	public float levelStartDelay = 0.01f;
     public float TurnDelay = 0.1f;
@@ -15,14 +16,16 @@ public class GameManager : MonoBehaviour {
     public BoardManager cityBoardManager;
     private BoardManager boardScript;
     public int playerHealth = 30;
-	public int playerHealthPostTransition = 20;
+	public int healthGainPostTransition = 20;
     [HideInInspector]
     public bool playersTurn = true;
 
     private Text quoteText;
 	private Text levelText;
 	private GameObject levelImage;
-    private int level = 1;
+	private GameObject quoteImage;
+	private GameObject deathImage;
+	private int level = 1;
     private int secondPhaseLevel = 1;
     private List<Enemy> enemies;
     private bool enemiesMoving;
@@ -32,6 +35,7 @@ public class GameManager : MonoBehaviour {
     private bool midFirstRun = true;
     private bool midRunOnce = true;
     private bool isCityPhase = false;
+	private bool win = false;
 	private System.Random rand = new System.Random();
 
 	private List<string> quotes = new List<string> ();
@@ -95,7 +99,7 @@ public class GameManager : MonoBehaviour {
         else if (midFirstRun && !midRunOnce)
         {
             midFirstRun = false;
-			playerHealth = playerHealthPostTransition;
+			playerHealth = playerHealth + healthGainPostTransition;
             return;
         } else
         { 
@@ -157,7 +161,6 @@ public class GameManager : MonoBehaviour {
     {
 		if(quotes.Count == 0)
         {
-			quotes.Add("I refuse to accept the view that mankind is so tragically bound to the starless midnight of racism and war that the bright daybreak of peace and brotherhood can never become a reality... I believe that unarmed truth and unconditional love will have the final word.\n\n- Martin Luther King Jr");
 			quotes.Add("We must learn to live together as brothers or perish together as fools.\n\n- Martin Luther King, Jr.");
 			quotes.Add("Preservation of one's own culture does not require contempt or disrespect for other cultures.\n\n- Cesar Chavez");
 			quotes.Add("We can see that immigration has become favorable terrain for the development of Islamism.\n\n- Marion Marachel-Le pen");
@@ -181,21 +184,30 @@ public class GameManager : MonoBehaviour {
     void InitGame()
     {
         doingSetup = true;
-		if (level > (LEVEL_TRANSITION + 13)) GameOver();
-        LoadQuotes();
-        quoteText = GameObject.Find("QuoteText").GetComponent<Text>();
-        levelImage = GameObject.Find("LevelImage");
-        levelText = GameObject.Find("LevelText").GetComponent<Text>();
-        levelText.text = "Day " + level;
-		int chooseQuote = rand.Next(0, quotes.Count - 1);
-        quoteText.text = quotes[chooseQuote];
-		quotes.RemoveAt (chooseQuote);
-        levelImage.SetActive(true);
+		if (level > LAST_LEVEL) {
+			win = true;
+			GameOver ();
+		} else {
+			deathImage = GameObject.Find ("DeathImage");
+			deathImage.SetActive (false);
+			LoadQuotes ();
+			quoteImage = GameObject.Find ("QuoteImage");
+			quoteText = GameObject.Find ("QuoteText").GetComponent<Text> ();
+			levelImage = GameObject.Find ("LevelImage");
+			levelText = GameObject.Find ("LevelText").GetComponent<Text> ();
+			levelText.text = "Day " + level;
+			int chooseQuote = rand.Next (0, quotes.Count - 1);
+			quoteText.text = quotes [chooseQuote];
+			quotes.RemoveAt (chooseQuote);
+			levelImage.SetActive (true);
+			quoteImage.SetActive (true);
+			quoteText.gameObject.SetActive (true);
 
-        StartCoroutine(DelayGameStartUntilInput());
+			StartCoroutine (DelayGameStartUntilInput ());
 
-        enemies.Clear();
-        boardScript.SetupScene(level);
+			enemies.Clear ();
+			boardScript.SetupScene (level);
+		}
         
     }
 
@@ -223,36 +235,33 @@ public class GameManager : MonoBehaviour {
     private void HideLevelImage()
 	{
 		levelImage.SetActive(false);
+		quoteImage.SetActive (false);
 		doingSetup = false;
 	}
 
-    public void GameOver()
-    {
+	public void GameOver()
+	{
 		SoundManager.instance.playDeathMusic ();
-        levelText.fontSize = 16;
-        string textAddition = "";
-        if(IsCityPhase())
-        {
-			textAddition = "Unfortunately, Bob could not run his whole life.\nExhausted, starving, and alone, he gave up.\n The police caught him and began interrogating him.\nWhere he is now --we may never know.\n\nYou made it " + (level + LEVEL_TRANSITION) + " days before having to give up.";
-        } else
-        {
-            textAddition = "Unfortunately, Bob could not complete the long journey\nto Mireaca. Exhausted and alone, he had to return\nto his home, which was now sucked dry by exploitation.\n\nYou made it " + level + " days before having to give up.";
-        }
-		levelText.text = textAddition;
-        quoteText.gameObject.SetActive(false);
-		levelImage.SetActive(true);
-        enabled = false;
-        StartCoroutine(DelayGameRestartUntilInput());
-    }
+		deathImage.SetActive(true);
+		Text deathText = GameObject.Find ("DeathText").GetComponent<Text> ();
+		if (win)
+			deathText.text = "After weeks of running, Sal finally managed to lose the cops. He found a small town to lay low and hide in, but was forced to work unstable jobs for income as he didn't want to reveal his identity. He was finally safe, and could start working towards this Mireacan dream..\nBut at what cost?";
+		else if(IsCityPhase())
+		{
+			deathText.text = "Unfortunately, Sal could not run his whole life.Exhausted, starving, and alone, he gave up. The police caught him and began interrogating him.\nWhere he is now --we may never know.\n\nHe made it " + (level + LEVEL_TRANSITION) + " days before having to give up.";
+		} else
+		{
+			deathText.text = "Unfortunately, Sal could not complete the long journey to Mireaca. Exhausted and alone, he had to return to his home, which was now sucked dry by exploitation.\n\nHe made it " + level + " days before having to give up.";
+		}
+		levelImage.SetActive (false);
+		quoteImage.SetActive (false);
+		enabled = false;
+		StartCoroutine(DelayGameRestartUntilInput());
+	}
 
-    public bool IsCityPhase()
-    {
-        if(level > LEVEL_TRANSITION)
-        {
-            isCityPhase = true;
-        }
-        return isCityPhase;
-    }
+	public bool IsCityPhase(){
+		return isCityPhase;
+	}
 
     public bool DoingMidTransition()
     {

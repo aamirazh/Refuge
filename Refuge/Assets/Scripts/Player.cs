@@ -40,9 +40,7 @@ public class Player : MovingObject {
 
     private void OnEnable()
     {
-
-        food = GameManager.instance.playerHealth;
-        
+        food = GameManager.instance.playerHealth;        
     }
 
     // Update is called once per frame
@@ -109,6 +107,7 @@ public class Player : MovingObject {
     {
         Wall hitWall = component as Wall;
         hitWall.DamageWall(wallDamage);
+		food--;
         animator.SetTrigger("playerAttack");
     }
 
