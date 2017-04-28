@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\OpeningSequence.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\SoundManager.cs" />
+     <Compile Include="Assets\Scripts\StartSceneSoundManager.cs" />
      <Compile Include="Assets\Scripts\StartScreenButtons.cs" />
      <Compile Include="Assets\Scripts\Wall.cs" />
      <Compile Include="Assets\TutorialInfo\Scripts\TutorialInfo.cs" />

@@ -7,6 +7,8 @@ public class StartScreenButtons : MonoBehaviour {
 
 	public void TransitionToOpeningScene()
     {
+        StartSceneSoundManager.instance.pauseMusic();
+        Destroy(StartSceneSoundManager.instance.gameObject);
         SceneManager.LoadScene("OpeningScene");
     }
 
