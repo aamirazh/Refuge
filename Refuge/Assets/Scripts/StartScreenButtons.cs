@@ -22,8 +22,20 @@ public class StartScreenButtons : MonoBehaviour {
         SceneManager.LoadScene("StartScreen");
     }
 
+    public void TransitionToStartSceneFromOptions()
+    {
+        DifficultyOptions.instance.hideOptions();
+        SceneManager.LoadScene("StartScreen");
+    }
+
     public void TransitionToTutorial()
     {
         SceneManager.LoadScene("ControlsScene");
+    }
+
+    public void TransitionToOptions()
+    {
+        SceneManager.LoadScene("OptionsScene");
+        DifficultyOptions.instance.showOptions();
     }
 }

@@ -48,7 +48,11 @@ public class GameManager : MonoBehaviour {
         else if (instance != this)
             Destroy(gameObject);
 
-		SoundManager.instance.playMainMusic ();
+
+        playerHealth = DifficultyOptions.instance.phaseOneHp;
+        healthGainPostTransition = DifficultyOptions.instance.phaseTwoHp;
+
+        SoundManager.instance.playMainMusic ();
         enemies = new List<Enemy>();
         DontDestroyOnLoad(gameObject);
 
