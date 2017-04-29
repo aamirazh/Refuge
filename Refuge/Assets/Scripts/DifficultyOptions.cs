@@ -8,7 +8,7 @@ public class DifficultyOptions : MonoBehaviour {
     public static DifficultyOptions instance = null;
 
     public int phaseOneHp = 30;
-    public int phaseTwoHp = 20;
+    public int phaseTwoHp = 10;
 
     private Text displayText;
 
